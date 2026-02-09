@@ -29,5 +29,5 @@ async def root():
 @app.get("/hello/{name}")
 async def hello(name: str):
     request = hello_pb2.HelloRequest(name=name)
-    response = await app.state.grpc_stub.SayHello(request)
+    response = await app.state.grpc_stub.SayHello(request, timeout=2.0)
     return {"message": response.message}
