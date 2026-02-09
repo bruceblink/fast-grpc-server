@@ -9,6 +9,7 @@ dependencies = [
     "grpcio>=1.78.0",
     "grpcio-tools>=1.78.0",
     "httpx>=0.28.1",
+    "protobuf>=6.33.5",
     "sqlmodel>=0.0.32",
     "uvicorn>=0.40.0",
 ]

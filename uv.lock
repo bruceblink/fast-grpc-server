@@ -72,6 +72,7 @@ dependencies = [
     { name = "grpcio" },
     { name = "grpcio-tools" },
     { name = "httpx" },
+    { name = "protobuf" },
     { name = "sqlmodel" },
     { name = "uvicorn" },
 ]
@@ -82,6 +83,7 @@ requires-dist = [
     { name = "grpcio", specifier = ">=1.78.0" },
     { name = "grpcio-tools", specifier = ">=1.78.0" },
     { name = "httpx", specifier = ">=0.28.1" },
+    { name = "protobuf", specifier = ">=6.33.5" },
     { name = "sqlmodel", specifier = ">=0.0.32" },
     { name = "uvicorn", specifier = ">=0.40.0" },
 ]
