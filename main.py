@@ -2,8 +2,25 @@ from fastapi import FastAPI
 import grpc
 import hello_pb2
 import hello_pb2_grpc
+from contextlib import asynccontextmanager
 
-app = FastAPI()
+
+@asynccontextmanager
+async def lifespan(_app: FastAPI):
+    # FastAPI 启动时
+    channel = grpc.aio.insecure_channel("127.0.0.1:50051")
+    stub = hello_pb2_grpc.HelloServiceStub(channel)
+
+    _app.state.grpc_channel = channel
+    _app.state.grpc_stub = stub
+
+    yield
+
+    # FastAPI 关闭时
+    await channel.close()
+
+
+app = FastAPI(lifespan=lifespan)
 
 @app.get("/")
 async def root():
@@ -11,19 +28,6 @@ async def root():
 
 @app.get("/hello/{name}")
 async def hello(name: str):
-    # 1. 创建 gRPC channel
-    channel = grpc.aio.insecure_channel("127.0.0.1:50051")
-
-    # 2. 创建 stub
-    stub = hello_pb2_grpc.HelloServiceStub(channel)
-
-    # 3. 构造请求
     request = hello_pb2.HelloRequest(name=name)
-
-    # 4. 调用 gRPC
-    response = await stub.SayHello(request)
-
-    # 5. 关闭 channel
-    await channel.close()
-
+    response = await app.state.grpc_stub.SayHello(request)
     return {"message": response.message}
